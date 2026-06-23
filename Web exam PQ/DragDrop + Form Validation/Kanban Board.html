@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+<style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    margin:0;
+    padding:30px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+.board{
+    display:flex;
+    gap:20px;
+}
+
+.column{
+    flex:1;
+    background:#f4f4f4;
+    border-radius:10px;
+    padding:15px;
+    min-height:300px;
+}
+
+.task{
+    background:white;
+    border:1px solid lightgray;
+    border-radius:5px;
+    padding:10px;
+    margin:10px 0;
+    cursor:grab;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 15px;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kanban Board</h1>
+        <input type="text" id="task" placeholder="Task name">
+        <button onclick="addTask()">Add Task</button>
+        <hr>
+        <div class="board">
+            <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event,'toDo')">
+                <h2>To Do</h2>
+                <div id="toDo"></div>
+            </div>
+
+            <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event,'progress')">
+                <h2>In Progress</h2>
+                <div id="progress"></div>
+            </div>
+            
+            <div class="column" ondragover="allowDrop(event)" ondrop="dropTask(event,'completed')">
+                <h2>Completed</h2>
+                <div id="completed"></div>
+            </div>
+        </div>
+        <script>
+            let toDo = [];
+            let progress = [];
+            let completed = [];
+            let draggedTask;
+            let sourceColumn;
+            function addTask(){
+                let task = document.getElementById("task").value;
+                if(task.trim() == "") {alert("Write the task!"); return;};
+                toDo.push(task);
+                document.getElementById("task").value = "";
+                displayBoard();
+            }
+            function dragTask(task, column){
+                draggedTask = task;
+                sourceColumn = column;
+            }
+            function allowDrop(event){
+                event.preventDefault();
+            }
+            function dropTask(event, targetColumn){
+                event.preventDefault();
+                let sourceArray = getArray(sourceColumn);
+                let targetArray = getArray(targetColumn);
+                let index = sourceArray.indexOf(draggedTask);
+                sourceArray.splice(index,1);
+                targetArray.push(draggedTask);
+                displayBoard();
+            }
+            function getArray(column){
+                if(column == "toDo") return toDo;
+                if(column == "progress") return progress;
+                return completed;
+            }
+            function displayBoard(){
+                document.getElementById("toDo").innerHTML = createTasks(toDo,"toDo");
+                document.getElementById("progress").innerHTML = createTasks(progress,"progress");
+                document.getElementById("completed").innerHTML = createTasks(completed,"completed");
+            }
+            function createTasks(array,column){
+                let output = "";
+                for(let i=0;i<array.length;i++){
+                    output += `
+                        <div class="task"
+                            draggable="true"
+                            ondragstart="dragTask('${array[i]}','${column}')">
+                            ${array[i]}
+                        </div>
+                    `;
+                }
+                return output;
+            }
+            displayBoard();
+        </script>
+    </div>
+</body>
+</html>

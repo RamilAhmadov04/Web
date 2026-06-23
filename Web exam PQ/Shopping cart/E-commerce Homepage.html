@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce platform</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            min-height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: navy;
+        }
+        .products, .cartProducts{
+            background:#f8f9fc;
+            border:1px solid #d6dce5;
+            border-radius:8px;
+            padding:12px;
+            margin:10px 0;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        button{
+            padding: 10px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+        }
+        h1{
+            font-size: large;
+        }
+        .container{
+            background-color: aliceblue;
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>E-Commerce Homepage</h1>
+        <input type="text" id="search" placeholder="Search products" onkeyup="displayProducts()">
+        <hr>
+        <h3>Products</h3>
+        <div id="productList"></div>
+        <hr>
+        <h3>Shopping Cart</h3>
+        <div id="cartList"></div>
+        <script>
+            let products = [
+                {name:"Laptop", price: 1000},
+                {name:"Phone", price: 700},
+                {name:"Headphones", price: 150},
+                {name:"Keyboard", price: 80},
+                {name:"Love", price: 0}
+            ];
+            let cart = [];
+            function displayProducts(){
+                let output = "";
+                let searchText = document.getElementById("search").value.toLowerCase();
+                for(let i = 0; i< products.length; i++){
+                    if(!products[i].name.toLowerCase().includes(searchText)) continue;
+                    output+=`
+                        <div class="products">
+                            ${products[i].name} - ${products[i].price}$
+                            <button onclick="addToCart(${i})">Add to cart</button>
+                        </div>
+                    `;
+                }
+                document.getElementById("productList").innerHTML = output;
+            }
+            function addToCart(index){
+                cart.push(products[index]);
+                displayCart();
+            }
+            function deleteFromCart(index){
+                cart.splice(index, 1);
+                displayCart();
+            }
+            function displayCart(){
+                let output = "";
+                let total = 0;
+                for(let i = 0; i< cart.length; i++){
+                    total += cart[i].price;
+                    output+=`
+                        <div class = "cartProducts">
+                            ${cart[i].name} - ${cart[i].price}$
+                            <button onclick = "deleteFromCart(${i})">Delete from cart</button>    
+                        </div>
+                    `;
+                }
+                output += `Total: ${total}`;
+                document.getElementById("cartList").innerHTML = output;
+            }
+            displayProducts();
+            displayCart();
+        </script>
+    </div>
+</body>
+</html>

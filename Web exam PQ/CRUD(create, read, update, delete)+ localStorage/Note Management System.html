@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Management System</title>
+    <style>
+        body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.notes{
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Note Management System</h1>
+    <input type="text" id = "note" placeholder="Write a note">
+    <button onclick="addNote()">Add Note</button>
+    <hr>
+    <div id="notesList"></div>
+    <script>
+        let notesList = JSON.parse(localStorage.getItem("notes")) || [];
+        function addNote(){
+            let note = document.getElementById("note").value;
+            if(note.trim() == "") return;
+            notesList.push({note: note});
+            document.getElementById("note").value = "";
+            saveData();
+            displayNotes();
+        }
+        function editNote(index){
+            let newNote = prompt("Enter new note:", notesList[index].note);
+            if(newNote.trim() == "") return;
+            notesList[index].note = newNote;
+            saveData();
+            displayNotes();
+        }
+        function deleteNote(index){
+            notesList.splice(index, 1);
+            saveData();
+            displayNotes();
+
+        }
+        function saveData(){
+            localStorage.setItem("notes", JSON.stringify(notesList));
+        }
+        function displayNotes(){
+            let output = "";
+            for(let i = 0; i< notesList.length; i++){
+                let note = notesList[i];
+                output+=`
+                    <div class = "notes">
+                        ${note.note};
+                        <button onclick = "editNote(${i})">Edit</button>
+                        <button onclick = "deleteNote(${i})">Delete</button>    
+                    </div>
+                `;
+            }
+            document.getElementById("notesList").innerHTML = output;
+        }
+        displayNotes();
+    </script>  
+    </div>
+</body>
+</html>

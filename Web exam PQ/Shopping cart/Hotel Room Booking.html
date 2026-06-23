@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Room Booking Interface</title>
+
+    <style>
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        background:#08245a;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        margin:0;
+    }
+
+    .container{
+        width:500px;
+        background:white;
+        padding:30px;
+        border-radius:10px;
+    }
+
+    h1{
+        color:#1f2d4d;
+        border-bottom:2px solid lightgray;
+        padding-bottom:10px;
+    }
+
+    .room{
+        border:1px solid gray;
+        border-radius:5px;
+        padding:10px;
+        margin:10px 0;
+    }
+
+    button{
+        padding:8px 15px;
+        margin-top:10px;
+        cursor:pointer;
+    }
+
+    button:disabled{
+        background:lightgray;
+        cursor:not-allowed;
+    }
+
+    #bookedRoom{
+        color:green;
+    }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Hotel Room Booking</h1>
+
+    <h3 id="bookedRoom">Booked Room: None</h3>
+
+    <hr>
+
+    <div id="roomList"></div>
+
+</div>
+
+<script>
+
+let rooms = [
+    {number:101, occupied:false},
+    {number:102, occupied:true},
+    {number:103, occupied:false},
+    {number:104, occupied:false},
+    {number:105, occupied:true}
+];
+
+function bookRoom(index){
+
+    if(rooms[index].occupied){
+        alert("Room already occupied!");
+        return;
+    }
+
+    rooms[index].occupied = true;
+
+    document.getElementById("bookedRoom").innerHTML =
+        "Booked Room: " + rooms[index].number;
+
+    displayRooms();
+}
+
+function displayRooms(){
+
+    let output = "";
+
+    for(let i = 0; i < rooms.length; i++){
+
+        output += `
+            <div class="room">
+
+                <b>Room ${rooms[i].number}</b>
+
+                <br>
+
+                Status:
+                ${rooms[i].occupied ? "Occupied" : "Available"}
+
+                <br>
+
+                <button
+                    onclick="bookRoom(${i})"
+                    ${rooms[i].occupied ? "disabled" : ""}>
+                    Select
+                </button>
+
+            </div>
+        `;
+    }
+
+    document.getElementById("roomList").innerHTML = output;
+}
+
+displayRooms();
+</script>
+
+</body>
+</html>

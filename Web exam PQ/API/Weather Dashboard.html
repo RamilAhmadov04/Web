@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <style>
+body{
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+    transition: 0.5s;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+}
+
+select{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+.weather{
+    border:1px solid lightgray;
+    border-radius:8px;
+    padding:15px;
+    background:#f8f8f8;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Weather Dashboard</h1>
+        <select id = "city"  onchange="displayWeather()">
+            <option value = "" selected disabled>Choose a city</option>
+            <option value="0">Baku</option>
+            <option value="1">London</option>
+            <option value="2">Cairo</option>
+            <option value="3">Moscow</option>
+        </select>
+        <div id = "weatherData"></div>
+        <script>
+            let weatherData = [
+                    {
+                        city:"Baku",
+                        temperature:28,
+                        condition:"Sunny"
+                    },
+                    {
+                        city:"London",
+                        temperature:16,
+                        condition:"Rainy"
+                    },
+                    {
+                        city:"Cairo",
+                        temperature:41,
+                        condition:"Sunny"
+                    },
+                    {
+                        city:"Moscow",
+                        temperature:10,
+                        condition:"Cloudy"
+                    }
+            ];
+            function changeBackground(condition){
+                if(condition == "Sunny") document.body.style.background = "rgb(240, 240, 4)";
+                else if(condition == "Rainy") document.body.style.background = "rgb(6, 48, 202)";
+                else if(condition == "Cloudy") document.body.style.background = "rgb(78, 80, 87)";
+                else document.body.style.background = "rgb(254, 255, 255)";
+            }
+            function displayWeather(){
+                let index = document.getElementById("city").value;
+                let weather = weatherData[index];
+                document.getElementById("weatherData").innerHTML = `
+                    <div class = "weather">
+                        <h3>${weather.city}</h3>
+                        <p>Temperature: ${weather.temperature} degrees</p>
+                        <p>Condition: ${weather.condition}</p>
+                    </div>
+                `;
+                changeBackground(weather.condition);
+            }
+            displayWeather();
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <style>
+        body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.student{
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Student Management System</h1>
+    <input type = "text" id="txt">
+    <button onclick="addStudent()">Add Student</button>
+    <br><br>
+    <input type = "text" id = "searchbox" placeholder="Search" onkeyup="displayStudents()">
+    <hr>
+    <div id="studentList"></div>
+    <script>
+        let studentList = [];
+        function addStudent(){
+            let name = document.getElementById("txt").value;
+            if(name.trim() == "") {alert("Write a name!"); return;}
+            studentList.push({name: name});
+            document.getElementById("txt").value = "";
+            displayStudents();
+        }
+        function displayStudents(){
+            let output = "";
+            let searchText = document.getElementById("searchbox").value;
+            for(let i = 0; i< studentList.length; i++){
+                let student = studentList[i];
+                if(!student.name.toLowerCase().includes(searchText.toLowerCase())) continue;
+            
+            output += `
+                <div class= "student">
+                    ${student.name}
+                    <button onclick = "editStudent(${i})">Edit</button>
+                    <button onclick = "deleteStudent(${i})">Delete</button>
+                </div>
+            `;
+            }
+            document.getElementById("studentList").innerHTML = output;
+        }
+        function editStudent(index){
+            let newName = prompt("Enter new name", studentList[index].name);
+            if(newName == null || newName.trim() == "") {alert("Write a new name!"); return;}
+            studentList[index].name = newName;
+            displayStudents();
+        }
+        function deleteStudent(index){
+            studentList.splice(index, 1);
+            displayStudents();
+        }
+        displayStudents();
+    </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog</title>
+<style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    width:600px;
+}
+
+.product{
+    border:1px solid lightgray;
+    padding:10px;
+    margin:10px 0;
+    border-radius:5px;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Product Catalog</h1>
+        <input type="text" id="search" placeholder="Search products" onkeyup="displayProducts()">
+        <select id="filter" onchange="displayProducts()">
+            <option value="All">All</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Accessories">Accessories</option>
+        </select>
+        <button onclick="sortProducts()">Sort By Price</button>
+        <hr>
+        <div id="productList"></div>
+    <script>
+        let products = [
+            {name:"Laptop", category:"Electronics", price:1000},
+            {name:"Phone", category:"Electronics", price:700},
+            {name:"Headphones", category:"Electronics", price:150},
+            {name:"Keyboard", category:"Accessories", price:80},
+            {name:"Mouse", category:"Accessories", price:50}
+        ];
+        function sortProducts(){
+            products.sort(function(a,b){ return a.price - b.price;});
+            displayProducts();
+        }
+        function displayProducts(){
+            let filter = document.getElementById("filter").value;
+            let searchText = document.getElementById("search").value.toLowerCase();
+            let output = "";
+            for(let i=0;i<products.length;i++){
+                if(filter != "All" && products[i].category != filter) continue;
+                if(!products[i].name.toLowerCase().includes(searchText)) continue;
+
+                output += `
+                    <div class="product">
+                        <b>${products[i].name}</b>
+                        <br>
+                        Category: ${products[i].category}
+                        <br>
+                        Price: ${products[i].price}$
+                    </div>
+                `;
+            }
+            document.getElementById("productList").innerHTML = output;
+        }
+        displayProducts();
+    </script>
+    </div>
+</body>
+</html>

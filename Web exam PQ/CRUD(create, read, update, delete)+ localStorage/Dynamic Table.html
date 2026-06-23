@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Table</title>
+    <style>
+        body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+        }
+th,td{
+    border:1px solid black;
+    padding:10px;
+    text-align:center;
+}
+th{
+    background-color:lightgray;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Dynamic Table Simulation</h1>
+    <input type="text" id="name" placeholder="Name">
+    <input type="number" id="age" placeholder="Age">
+    <button onclick="addRow()">Add</button>
+    <button onclick="sortByName()">Sort Name</button>
+    <button onclick="sortByAge()">Sort Age</button>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+    <script>
+        let data = [];
+        function addRow(){
+            let name = document.getElementById("name").value;
+            let age = Number(document.getElementById("age").value);
+            if(name.trim() == "") {alert("Write a name!"); return;}
+            data.push({name: name, age: age});
+            document.getElementById("name").value = "";
+            document.getElementById("age").value = "";
+            displayTable();
+        }
+        function editRow(index){
+            let newName = prompt("New name:", data[index].name);
+            let newAge = prompt("New age:", data[index].age);
+            if(newName.trim() == "") {alert("Write a new name!"); return;}
+            if(newAge.trim() == "") {alert("Write a new age!"); return;}
+            data[index].name = newName;
+            data[index].age = newAge;
+            displayTable();
+        }
+        function deleteRow(index){
+            data.splice(index, 1);
+            displayTable();
+        }
+        function sortByName(){
+            data.sort(function(a, b){ return a.name.localeCompare(b.name);});
+            displayTable();
+        }
+        function sortByAge(){
+            data.sort(function(a, b){ return a.age - b.age;});
+            displayTable();
+        }
+        function displayTable(){
+            let output = "";
+            for(let i = 0; i< data.length; i++){
+                output+=`
+                    <tr>
+                        <td>${data[i].name}</td>
+                        <td>${data[i].age}</td>
+                        <td>
+                            <button onclick = "editRow(${i})">Edit</button>
+                            <button onclick = "deleteRow(${i})">Delete</button>     
+                        </td>
+                    </tr>
+                `;
+                document.getElementById("tableBody").innerHTML = output;
+            }
+        }
+        displayTable();
+    </script>
+    </div>
+</body>
+</html>

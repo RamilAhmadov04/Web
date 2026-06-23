@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.task{
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.done{
+    text-decoration:line-through;
+    color:gray;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Task Manager</h1>
+    <input type="text" id="txtTask" placeholder="Add Task">
+    <button onclick="addTask()">Add</button>
+    <button onclick="showAll()">All</button>
+    <button onclick="showCompleted()">Completed</button>
+    <button onclick="showActive()">Active</button>
+    <hr>
+    <div id="taskList"></div>
+<script>
+let taskArray = [];
+let mode = "all";
+
+function addTask(){
+    let text = document.getElementById("txtTask").value;
+    if(text.trim()=="") return;
+    taskArray.push({
+        text : text,
+        completed : false
+    });
+    document.getElementById("txtTask").value="";
+    displayTasks();
+}
+
+function completeTask(index){
+    taskArray[index].completed = !taskArray[index].completed;
+    displayTasks();
+}
+
+function deleteTask(index){
+    taskArray.splice(index,1);
+    displayTasks();
+}
+
+function showAll(){
+    mode = "all";
+    displayTasks();
+}
+
+function showCompleted(){
+    mode = "completed"
+    displayTasks();
+}
+
+function showActive(){
+    mode = "active";
+    displayTasks();
+}
+
+function displayTasks(){
+    let output = "";
+
+    for(let i = 0 ; i<taskArray.length ; i++){
+        
+        let task = taskArray[i];
+
+        if(mode == "completed" && !task.completed) continue;
+        if(mode == "active" && task.completed) continue;
+
+        output+=`
+            <div class="task">
+                <span class="${task.completed ? "done" : ""}">${task.text}</span>
+                <button onclick="completeTask(${i})">Complete</button>
+                <button onclick="deleteTask(${i})">Delete</button>
+            </div>
+        `;
+    }
+    document.getElementById("taskList").innerHTML = output;
+}
+
+displayTasks();
+
+</script>
+    </div>
+</body>
+</html>

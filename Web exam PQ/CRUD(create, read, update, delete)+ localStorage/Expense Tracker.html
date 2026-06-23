@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.expense{
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+#balance{
+    background:#f8f9fc;
+    border:1px solid #d9d9d9;
+    border-radius:8px;
+    padding:15px;
+    color:#1f2d4d;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Expense Tracker</h1>
+    <input type = "number" id = "income" placeholder="Income">
+    <button onclick="addIncome()">Add Income</button>
+    <input type="text" id="description" placeholder="Description">
+    <input type="number" id = "amount" placeholder="Amount">
+    <button onclick="addExpense()">Add Expense</button>
+    <hr>
+    <h3 id = "balance"></h3>
+    <div id = "expenseList"></div>
+    <script>
+        let expenseList = JSON.parse(localStorage.getItem("expenses")) || [];
+        let income = Number(localStorage.getItem("income")) || 0;
+        function addIncome(){
+            income  = Number(document.getElementById("income").value);
+            if(income <= 0) {alert("Write the income!"); return;}
+            saveData();
+            document.getElementById("income").value = "";
+            displayExpenses();
+        }
+        function addExpense(){
+            let desc = document.getElementById("description").value;
+            let amount = Number(document.getElementById("amount").value);
+            if(amount <= 0) {alert("Write the amount!"); return;}
+            if(desc.trim() == "" || amount <= 0) return;
+            expenseList.push({desc:desc, amount:amount});
+            saveData();
+            document.getElementById("description").value = "";
+            document.getElementById("amount").value = "";
+            displayExpenses();
+        }
+        function deleteExpense(index){
+            expenseList.splice(index, 1);
+            saveData();
+            displayExpenses();
+        }
+        function saveData(){
+            localStorage.setItem("expenses", JSON.stringify(expenseList));
+            localStorage.setItem("income", income);
+        }
+        function displayExpenses(){
+            let output = "";
+            let totalExpenses = 0;
+            for(let i = 0; i< expenseList.length; i++){
+                let expense = expenseList[i];
+                totalExpenses+= expense.amount;
+                output+=`
+                    <div class = "expense">
+                        ${expense.desc};
+                        ${expense.amount};
+                        <button onclick = "deleteExpense(${i})">Delete</button>
+                        </div>
+                `;
+            }
+            document.getElementById("expenseList").innerHTML = output;
+            let balance = income - totalExpenses;
+            document.getElementById("balance").innerHTML = `
+                Income: ${income}
+                Expenses: ${totalExpenses}
+                Balance: ${balance}
+            `;
+        }
+        displayExpenses();
+    </script>
+    </div>
+</body>
+</html>

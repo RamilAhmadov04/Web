@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Event Scheduler</title>
+    <style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:600px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    border-bottom:2px solid lightgray;
+    padding-bottom:10px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    box-sizing:border-box;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+}
+
+.event{
+    border:1px solid lightgray;
+    border-radius:5px;
+    padding:10px;
+    margin-top:10px;
+    background:#f8f8f8;
+}
+
+#calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+}
+
+.day{
+    padding:15px;
+    border:1px solid gray;
+    text-align:center;
+    border-radius:5px;
+}
+
+.today{
+    padding:15px;
+    border:1px solid rgb(196, 11, 11);
+    text-align:center;
+    border-radius:5px;
+    background:#085a0f;
+    color:white;
+    font-weight:bold;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calendar Event Scheduler</h1>
+        <input type="text" id="event" placeholder="Event Name">
+        <input type="date" id="date" placeholder="Date">
+        <button onclick="addEvent()">Add Event</button>
+        <hr>
+        <div id = "calendar"></div>
+        <div id = "eventList"></div>
+        <script>
+            let events = [];
+            function displayCalendar(){
+                let today = new Date();
+                let thisDay = today.getDate();
+                let thisMonth = today.getMonth();
+                let thisYear = today.getFullYear();
+                let daysInMonth = new Date(thisYear, thisMonth, 0).getDate();
+                let output = "";
+                for(let i = 1; i<= daysInMonth; i++){
+                    if(i == thisDay){
+                        output+= `
+                            <div class = "today">
+                                ${i}    
+                            </div>
+                        `;
+                    }
+                    else{
+                        output+=`
+                            <div class = "day">
+                                ${i}    
+                            </div>
+                        `;
+                    }
+                }
+                document.getElementById("calendar").innerHTML = output;
+            }
+            displayCalendar(); 
+            function addEvent(){
+                let name = document.getElementById("event").value;
+                let date = document.getElementById("date").value;
+                if(name.trim() == "") {alert("Write the event"); return;}
+                if(date == "") {alert("Choose a date"); return;}
+                events.push({name: name, date: date});
+                document.getElementById("event").value = "";
+                document.getElementById("date").value = "";
+                displayEvents();
+            }
+            function editEvent(index){
+                let newName = prompt("Write the new event name: ", events[index].name);
+                if(newName.trim() == "") {alert("Write the new event name"); return;}
+                events[index].name = newName;
+                displayEvents();
+            }
+            function deleteEvent(index){
+                events.splice(index, 1);
+                displayEvents();
+            }
+            function displayEvents(){
+                let output = "";
+                for(let i = 0; i< events.length; i++){
+                    output+=`
+                        <div class = "events">
+                            <b>${events[i].name}</b>
+                            <br>
+                            <b>Date: ${events[i].date}</b>
+                            <button onclick = "editEvent(${i})">Edit</button>
+                            <button onclick = "deleteEvent(${i})">Delete</button>
+                        </div>
+                    `;
+                }
+                document.getElementById("eventList").innerHTML = output;
+            }
+            displayEvents();
+        </script>
+    </div>
+</body>
+</html>

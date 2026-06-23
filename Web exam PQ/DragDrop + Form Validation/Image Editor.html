@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Editor</title>
+    <style>
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:700px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+}
+
+h1{
+    color:#1f2d4d;
+    border-bottom:2px solid lightgray;
+    padding-bottom:10px;
+}
+
+img{
+    width:300px;
+    margin-top:20px;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    cursor:pointer;
+}
+
+.controls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Image Editor</h1>
+        <img id="image" src="https://m.media-amazon.com/images/I/91hUbujyPhL._UF1000,1000_QL80_.jpg">
+        <div class = "controls">
+            <button onclick="increaseSize()">Zoom In</button>
+            <button onclick="decreaseSize()">Zoom Out</button>
+            <button onclick="rotateLeft()">Rotate Left</button>
+            <button onclick="rotateRight()">Rotate Right</button>
+            <button onclick="toggleGray()">Grayscale</button>
+        </div>
+        <script>
+            let size = 300;
+            let rotation = 0;
+            let gray = false;
+            function increaseSize(){
+                size += 50;
+                updateImage();
+            }
+
+            function decreaseSize(){
+                if(size > 100) size -= 50;
+                updateImage();
+            }
+            function rotateLeft(){
+                rotation -= 90;
+                updateImage();
+            }
+            function rotateRight(){
+                rotation += 90;
+                updateImage();
+            }
+            function toggleGray(){
+                gray = !gray;
+                updateImage();
+            }
+            function updateImage(){
+                let image = document.getElementById("image");
+                image.style.width = size + "px";
+                image.style.transform = "rotate(" + rotation + "deg)";
+                image.style.filter = gray ? "grayscale(100%)" : "grayscale(0%)";
+            }
+            updateImage();
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight Reservation</title>
+<style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+.seat{
+    display:inline-block;
+    width:60px;
+    height:60px;
+    line-height:60px;
+    text-align:center;
+    border:1px solid gray;
+    margin:5px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+.selected{
+    background:green;
+    color:white;
+}
+
+.occupied{
+    background:red;
+    color:white;
+    cursor:not-allowed;
+}
+
+#total{
+    margin-top:20px;
+    font-size:20px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Flight Reservation</h1>
+
+<div id="seatList"></div>
+
+<h3 id="total">
+Total Price: $0
+</h3>
+
+</div>
+
+<script>
+
+let seats = [
+    {number:"A1", occupied:false},
+    {number:"A2", occupied:true},
+    {number:"A3", occupied:false},
+    {number:"B1", occupied:false},
+    {number:"B2", occupied:false},
+    {number:"B3", occupied:true}
+];
+
+let selectedSeats = [];
+
+function toggleSeat(index){
+
+    if(seats[index].occupied){
+        alert("Seat already occupied!");
+        return;
+    }
+
+    let position =
+    selectedSeats.indexOf(index);
+
+    if(position == -1){
+
+        selectedSeats.push(index);
+
+    }else{
+
+        selectedSeats.splice(position,1);
+    }
+
+    displaySeats();
+}
+
+function displaySeats(){
+
+    let output = "";
+
+    for(let i=0;i<seats.length;i++){
+
+        let cssClass = "";
+
+        if(seats[i].occupied){
+
+            cssClass = "occupied";
+
+        }
+        else if(
+            selectedSeats.includes(i)
+        ){
+
+            cssClass = "selected";
+        }
+
+        output += `
+            <div
+            class="seat ${cssClass}"
+            onclick="toggleSeat(${i})">
+
+                ${seats[i].number}
+
+            </div>
+        `;
+    }
+
+    document.getElementById("seatList")
+    .innerHTML = output;
+
+    let total =
+    selectedSeats.length * 100;
+
+    document.getElementById("total")
+    .innerHTML =
+    "Total Price: " + total;
+}
+
+displaySeats();
+
+</script>
+
+</body>
+</html>

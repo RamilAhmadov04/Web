@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Explorer Simulation</title>
+    <style>
+        body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.folder{
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rebeccapurple;
+    border-radius: 10px;
+}
+ .file{
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid lightslategray;
+    border-radius: 5px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>File Explorer Simulation</h1>
+    <input type="text" id="folder" placeholder="Folder">
+    <button onclick="addFolder()">Add Folder</button>
+    <br><br>
+    <input type="text" id="file" placeholder="File">
+    <button onclick="addFile()">Add File</button>
+    <hr>
+    <div id="explorer"></div>
+    <script>
+        let folders = [];
+        function addFolder(){
+            let folderName = document.getElementById("folder").value;
+            if(folderName.trim() == "") return;
+            folders.push({name: folderName, files: []});
+            document.getElementById("folder").value = "";
+            displayExplorer();
+        }
+        function addFile(){
+            let fileName = document.getElementById("file").value;
+            if(fileName.trim() == "") return;
+            let folderIndex = prompt("Enter folder number:");
+            if(folderIndex == null) return;
+            folders[folderIndex].files.push(fileName);
+            document.getElementById("file").value = "";
+            displayExplorer();
+        }
+        function editFolder(index){
+            let newFolder = prompt("Enter new Folder name:", folders[index].name);
+            if(newFolder.trim() == null) return;
+            folders[index].name = newFolder;
+            displayExplorer();
+        }
+        function deleteFolder(index){
+            folders.splice(index, 1);
+            displayExplorer();
+        }
+        function editFile(folderIndex, fileIndex){
+            let newFile = prompt("Enter new File name:", folders[folderIndex].files[fileIndex]);
+            if(newFile.trim() == null) return;
+            folders[folderIndex].files[fileIndex] = newFile;
+            displayExplorer();
+        }
+        function deleteFile(folderIndex, fileIndex){
+            folders[folderIndex].files.splice(fileIndex, 1);
+            displayExplorer();
+        }
+        function displayExplorer(){
+            let output = "";
+            for(let i = 0; i< folders.length;i++){
+                output+=`
+                    <div class = "folder">
+                        ${i}: ${folders[i].name};
+                        <button onclick = "editFolder(${i})">Rename</button>
+                        <button onclick = "deleteFolder(${i})">Delete</button>
+                        <br><br>
+
+                `;
+                for(let j = 0; j< folders[i].files.length; j++){
+                    output+=`
+                        <div class = "file">
+                            ${folders[i].files[j]};
+                            <button onclick = "editFile(${i}, ${j})">Edit</button>
+                            <button onclick = "deleteFile(${i}, ${j})">Delete</button>
+                            </div>
+                    `;
+                }
+                output+=`
+                    </div>
+                `;
+            }
+            document.getElementById("explorer").innerHTML = output;
+        }
+        displayExplorer();
+    </script>
+    </div>
+</body>
+</html>

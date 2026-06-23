@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+    text-align: center;
+}
+
+img{
+    width:100px;
+    height:70px;
+    object-fit:cover;
+    margin:5px;
+    border:2px solid transparent;
+}
+
+.container{
+    width:700px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+.preview{
+    width:100%;
+    height:fit-content;
+    object-fit:fill;
+    border-radius:10px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Image Gallery</h1>
+        <img id = "preview" class = "preview">
+        <button onclick="previousImage()"><--</button>
+        <button onclick="nextImage()">--></button>
+        <div id = "gallery"></div>
+        <script>
+            let images = [
+                "https://f4.bcbits.com/img/a3475085788_16.jpg",
+                "https://upload.wikimedia.org/wikipedia/en/a/ab/Arca_-_Kick_II.png",
+                "https://f4.bcbits.com/img/a1108926066_16.jpg",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKCVcbMcz29vFiBs5k1JBV03OMJqq9SETcjw&s",
+                "https://f4.bcbits.com/img/a4139324412_16.jpg"
+            ];
+            let currentImage = 0;
+            function showImage(index){
+                currentImage = index;
+                document.getElementById("preview").src = images[currentImage];
+            }
+            function nextImage(){
+                currentImage++;
+                if(currentImage>= images.length) currentImage = 0;
+                document.getElementById("preview").src = images[currentImage];
+            }
+            function previousImage(){
+                currentImage--;
+                if(currentImage < 0) currentImage = images.length - 1;
+                document.getElementById("preview").src = images[currentImage];
+            }
+            function displayImages(){
+                let output = "";
+                for(let i = 0; i< images.length; i++){
+                    output+=`
+                        <img src = "${images[i]}" onclick = "showImage(${i})">
+                    `;
+                }
+                document.getElementById("gallery").innerHTML = output;
+                document.getElementById("preview").src = images[currentImage];
+            }
+            displayImages();
+        </script>
+    </div>
+</body>
+</html>

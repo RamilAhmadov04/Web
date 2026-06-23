@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Card Game</title>
+    <style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    width:500px;
+    text-align:center;
+}
+
+#game{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:20px;
+}
+
+.cards{
+    height:80px;
+    font-size:35px;
+    border:1px solid gray;
+    border-radius:5px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    background:#f4f4f4;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Memory Card Game</h1>
+        <h3 id = "attempts">Attempts: 0</h3>
+        <div id = "game"></div>
+        <script>
+            let cards = [
+                "🍎","🍎",
+                "🍌","🍌",
+                "🍇","🍇",
+                "🍒","🍒",
+                "🍉","🍉",
+                "🍍","🍍",
+                "🥝","🥝",
+                "🍑","🍑"
+            ];
+            cards.sort(() => Math.random() - 0.5);
+            let revealed = [];
+            let matched = [];
+            let attempts = 0;
+            function clickCard(index){
+                if(revealed.length == 2) return;
+                if(revealed.includes(index)) return;
+                if(matched.includes(index)) return;
+                revealed.push(index);
+                displayCards();
+                if(revealed.length == 2) {
+                    attempts++;
+                    document.getElementById("attempts").innerHTML = "Attempts: " + attempts;
+                    let first = revealed[0];
+                    let second = revealed[1];
+                    if(cards[first] == cards[second]){
+                        matched.push(first);
+                        matched.push(second);
+                        revealed = [];
+                        displayCards();
+                    }
+                    else{
+                        setTimeout(function(){revealed = []; displayCards();}, 1000);
+                    }
+                }
+            }
+            function displayCards(){
+                let output = "";
+                for(let i = 0; i< cards.length; i++){
+                    let text = "?";
+                    if(revealed.includes(i) || matched.includes(i)) text = cards[i];
+                    output+=`
+                        <div class = "cards" onclick = "clickCard(${i})">${text}</div>
+                    `;
+                }
+                document.getElementById("game").innerHTML = output;
+            }
+            displayCards();
+        </script>
+    </div>
+</body>
+</html>

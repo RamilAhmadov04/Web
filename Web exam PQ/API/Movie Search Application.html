@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search Application</title>
+    <style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    margin:0;
+    padding:30px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    border-bottom:2px solid lightgray;
+    padding-bottom:10px;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    box-sizing:border-box;
+    border:1px solid lightgray;
+    border-radius:5px;
+}
+
+.movie{
+    display:flex;
+    gap:15px;
+    border:1px solid lightgray;
+    border-radius:8px;
+    padding:15px;
+    margin-top:15px;
+    background:#f8f8f8;
+}
+
+body{
+    font-family:Arial;
+    background:#08245a;
+    margin:0;
+    padding:30px;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    border-bottom:2px solid lightgray;
+    padding-bottom:10px;
+}
+
+input, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    box-sizing:border-box;
+    border:1px solid lightgray;
+    border-radius:5px;
+}
+
+.movies{
+    display:flex;
+    gap:15px;
+    border:1px solid lightgray;
+    border-radius:8px;
+    padding:15px;
+    margin-top:15px;
+    background:#f8f8f8;
+}
+
+img{
+    width:120px;
+    height:170px;
+    object-fit:cover;
+    border-radius:5px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Movie Search Application</h1>
+        <input type = "text" id="search" placeholder="Search movie" onkeyup="displayMovies()">
+        <select id = "yearFilter" onchange="displayMovies()">
+            <option value = "">All Years</option>
+            <option>1994</option>
+            <option>1999</option>
+            <option>2008</option>
+            <option>2010</option>
+        </select>
+        <div id = "movieList"></div>
+        <script>
+            let movies = [
+                {
+                    title:"The Shawshank Redemption",
+                    year:1994,
+                    poster:"https://m.media-amazon.com/images/I/81nC3JX2NfL.jpg",
+                    description:"Two imprisoned men bond over years."
+                },
+                {
+                    title:"The Matrix",
+                    year:1999,
+                    poster:"https://m.media-amazon.com/images/I/51EG732BV3L.jpg",
+                    description:"A hacker discovers reality is a simulation."
+                },
+                {
+                    title:"Inception",
+                    year:2010,
+                    poster:"https://m.media-amazon.com/images/I/81p+xe8cbnL.jpg",
+                    description:"A thief enters dreams to steal secrets."
+                },
+                {
+                    title:"The Dark Knight",
+                    year:2008,
+                    poster:"https://m.media-amazon.com/images/I/71poxA6mUCL.jpg",
+                    description:"Batman battles the Joker."
+                }
+            ];
+            function displayMovies(){
+                let searchText = document.getElementById("search").value;
+                let selectedYear = document.getElementById("yearFilter").value;
+                let output = "";
+                for(let i = 0; i< movies.length; i++){
+                    if(!movies[i].title.toLowerCase().includes(searchText.toLowerCase())) continue;
+                    if(selectedYear != "" && movies[i].year != selectedYear) continue;
+                    output+=`
+                        <div class = "movies">
+                            <img src = "${movies[i].poster}">
+                            <h3><b>${movies[i].title}</b></h3>
+                            <p>Year: ${movies[i].year}</p>
+                            <p>${movies[i].description}</p>
+                        </div>
+                    `;
+                }
+                document.getElementById("movieList").innerHTML = output; 
+            }
+            displayMovies();
+        </script>
+    </div>
+</body>
+</html>

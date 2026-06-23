@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: navy;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        input{
+            width: 100%;
+            padding: 10px;
+            margin: 10px auto;
+            box-sizing: border-box;
+            border: 1px solid lightslategray;
+            border-radius: 5px;
+        }
+        .container{
+            width: 500px;
+            background-color: aliceblue;
+            padding: 30px;
+        }
+        button{
+            width: 100%;
+            padding: 10px;
+            margin: 10px;
+        }
+        #message{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Registration Form</h1>
+        <input type="text" id = "username" placeholder="Username">
+        <input type="text" id = "email" placeholder="Email">
+        <input type="password" id = "password" placeholder="Password" onkeyup="checkPassword()">
+        <p id = "strength">Password Strength: </p>
+        <p id = "message"></p>
+        <button onclick="register()">Register</button>
+        <script>
+            function checkPassword(){
+                let password = document.getElementById("password").value;
+                let passwordCharArray = [...password];
+                let strength = "Weak";
+                let upper = false;
+                let digit = false;
+                for(let i = 0; i< passwordCharArray.length; i++){
+                    let upperCase = passwordCharArray[i].toUpperCase(); 
+                    if(passwordCharArray[i] != '' && Number.isInteger(Number(passwordCharArray[i]))) digit = true;
+                    if(passwordCharArray[i] === passwordCharArray[i].toUpperCase() && passwordCharArray[i] !== passwordCharArray[i].toLowerCase()) upper = true;
+                }
+                if(digit && upper && password.length >= 8) strength = "Strong";
+                document.getElementById("strength").innerHTML = "Password Strength: " + strength;
+            }
+            function register(){
+                let username = document.getElementById("username").value;
+                let email = document.getElementById("email").value;
+                let password = document.getElementById("password").value;
+                if(username.trim() == "") {alert("Write the Username"); return;}
+                if(email.trim() == "") {alert("Write the Email"); return;}
+                if(password.trim() == "") {alert("Write the Password"); return;}
+                if(!email.includes("@")) {alert("Invalid Email"); return;}
+                document.getElementById("message").innerHTML = "Registration Succesful!";
+            }
+        </script>
+    </div>
+</body>
+</html>

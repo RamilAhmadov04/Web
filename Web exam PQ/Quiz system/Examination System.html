@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Application</title>
+    <style>
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        background:#08245a;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        margin:0;
+    }
+
+    .container{
+        width:300px;
+        margin:50px auto;
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    }
+
+    h1{
+        color:#1f2d4d;
+        font-size:32px;
+        border-bottom:2px solid #d9d9d9;
+        padding-bottom:15px;
+    }
+
+    button{
+        width:100%;
+        text-align:center;
+        background:white;
+        color:black;
+        border:1px solid #bdbdbd;
+        padding:15px;
+        border-radius:4px;
+        margin:10px 0;
+        cursor:pointer;
+        font-size:16px;
+    }
+
+    button:hover{
+        background: #0b2458;
+    }
+
+    .quiz {
+        font-size:22px;
+        color:#1f2d4d;
+        margin-bottom:20px;
+    }
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <h1>Exam Application</h1>
+        <h3 id ="timeLeft">Time left : 30 seconds</h3>
+        <div id = "exam"></div>
+        <script>
+            let questions = [
+                {question: "What is the capital of Azerbaijan?", options: ["Baku", "Ganja", "Lenkeran", "Quba"], answer: "Baku"},
+                {question: "What is 2^10?", options: ["128", "64", "512", "1024"], answer: "1024"},
+                {question: "What does HTML stand for?", options: ["Hyper Text Markup Language", "High Text Machine Language", "Home Tool Markup Language", "Hyper Tool Machine Language"], answer: "Hyper Text Markup Language"}
+            ];
+            let currentQuestion = 0;
+            let score = 0;
+            let timeLeft = 30;
+            let timer = setInterval(updateTimer, 1000);
+            function updateTimer(){
+                timeLeft--;
+                document.getElementById("timeLeft").innerHTML = "Time left: " + timeLeft + " seconds";
+                if(timeLeft <= 0){
+                    clearInterval(timer);
+                    finishExam();
+                }
+            }
+            function finishExam(){
+                document.getElementById("exam").innerHTML = `
+                    <h2>Exam Finished</h2>
+                    <p>Score: ${score}/${questions.length}</p>
+                `;
+            }
+            function checkAnswer(choice){
+                if(choice === questions[currentQuestion].answer) score++;
+                currentQuestion++;
+                displayQuestions();
+            }
+            function displayQuestions(){
+                if(currentQuestion >= questions.length){
+                    clearInterval(timer);
+                    finishExam();
+                    return;
+                }
+                let q = questions[currentQuestion];
+                let output = "";
+                output+=`
+                    <div class = "exam">
+                    <h2>${q.question}</h2>
+                `;
+                for(let i = 0; i< q.options.length; i++){
+                    output+=`
+                        <button onclick="checkAnswer('${q.options[i]}')">${q.options[i]}</button>
+                        <br><br>
+                    `;
+                }
+                output+=`</div>`;
+                document.getElementById("exam").innerHTML = output;
+            }
+            displayQuestions();
+        </script>
+    </div>
+</body>
+</html>

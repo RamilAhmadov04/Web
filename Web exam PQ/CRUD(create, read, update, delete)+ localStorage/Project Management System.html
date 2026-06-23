@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management System</title>
+    <style>
+        body{
+    font-family: Arial, Helvetica, sans-serif;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    width:500px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
+
+h1{
+    color:#1f2d4d;
+    font-size:32px;
+    border-bottom:2px solid #d9d9d9;
+    padding-bottom:15px;
+}
+
+input{
+    padding:10px;
+    margin:10px 0;
+    border:1px solid lightslategrey;
+    border-radius:5px;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    padding:8px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    background:#08245a;
+    color:white;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.projects{
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Project Management System</h1>
+    <input type="text" id="project" placeholder="Project Name">
+    <button onclick="addProject()">Add Project</button>
+    <input type="text" id="task" placeholder="Task Name">
+    <button onclick="addTask()">Add Task</button>
+    <hr>
+    <div id = "projectList"></div>
+    <script>
+        let projects = [];
+        function addProject(){
+            let projectName = document.getElementById("project").value;
+            if(projectName.trim() == "") {alert("Write project name"); return;}
+            projects.push({name: projectName, tasks: []});
+            document.getElementById("project").value = "";
+            displayProjects();
+        }
+        function addTask(){
+            let taskName = document.getElementById("task").value;
+            if(taskName.trim() == "") {alert("Write task name"); return;}
+            let projectIndex = prompt("Enter project number:");
+            if(projectIndex.trim() == "") {alert("Write project number"); return;}
+            projects[projectIndex].tasks.push({name: taskName, completed: false});
+            document.getElementById("task").value = "";
+            displayProjects();
+        }
+        function completeTask(projectIndex, taskIndex){
+            projects[projectIndex].tasks[taskIndex].completed = !projects[projectIndex].tasks[taskIndex].completed;
+            displayProjects();
+        }
+        function deleteProject(Index){
+            projects.splice(Index, 1);
+            displayProjects();
+        }
+        function deleteTask(projectIndex, taskIndex){
+            projects[projectIndex].tasks.splice(taskIndex, 1);
+            displayProjects();
+        }
+        function getPercentage(project){
+            if(project.tasks.length == 0) return 0;
+            let completed = 0;
+            for(let i = 0; i< project.tasks.length; i++){
+                if(project.tasks[i].completed) completed++;
+            }
+            return Math.round(completed*100/project.tasks.length);
+        }
+        function displayProjects(){
+            let output = "";
+            for(let i = 0; i< projects.length; i++){
+                let percentage = getPercentage(projects[i]);
+                output+=`
+                    <div class = "projects">
+                        <h3>${i}: ${projects[i].name}(${percentage}%)</h3>
+                        <button onclick="deleteProject(${i})">Delete Project</button>
+                        <br><br>
+                `;
+                for(let j = 0; j< projects[i].tasks.length; j++){
+                    output+=`
+                        <div class = "tasks">
+                            ${projects[i].tasks[j].completed ? "Completed" : "Incomplete"}
+                            ${projects[i].tasks[j].name}
+                            <button onclick = "completeTask(${i}, ${j})">Complete Task</button>
+                            <button onclick="deleteTask(${i}, ${j})">Delete Task</button>
+                        </div>
+                    `;
+                }
+                output+=`</div>`;
+            }
+            document.getElementById("projectList").innerHTML = output;
+        }
+        displayProjects();
+    </script>
+    </div>
+</body>
+</html>

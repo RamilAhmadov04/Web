@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+body{
+    font-family:Arial;
+    background:#08245a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    width:500px;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+}
+
+#trackName{
+    font-size:20px;
+    margin:20px;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Music Player</h1>
+        <h3 id="trackName"></h3>
+        <audio id="player"></audio>
+        <button onclick="previousTrack()">Previous</button>
+        <button onclick="playPause()">Play / Pause</button>
+        <button onclick="nextTrack()">Next</button>
+        <script>
+            let tracks = [
+                "song1.mp3",
+                "song2.mp3",
+                "song3.mp3"
+            ];
+            let currentTrack = 0;
+            let player = document.getElementById("player");
+            function loadTrack(){
+                player.src = tracks[currentTrack];
+                document.getElementById("trackName").innerHTML = tracks[currentTrack];
+            }
+            function playPause(){
+                if(player.paused) player.play();
+                else player.pause();
+            }
+            function nextTrack(){
+                currentTrack++;
+                if(currentTrack >= tracks.length) currentTrack = 0;
+                loadTrack();
+                player.play();
+            }
+            function previousTrack(){
+                currentTrack--;
+                if(currentTrack < 0) currentTrack = tracks.length - 1;
+                loadTrack();
+                player.play();
+            }
+            loadTrack();
+        </script>
+    </div>
+</body>
+</html>
